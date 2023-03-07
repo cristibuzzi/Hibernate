@@ -1,23 +1,26 @@
 package com.sda.hibernate.repository;
-import com.sda.hibernate.models.Employee;
+
+import com.sda.hibernate.models.Account;
 import com.sda.hibernate.utils.SessionManager;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EmployeeRepositoryImpl implements EmployeeRepository {
+public class AccountRepositoryImpl implements AccountRepository {
+
 
     @Override
-    public void createEmployee(Employee employee) {
+    public void createAccount(Account account) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.save(employee);
+            session.save(account);
 
             transaction.commit();
         } catch (Exception e) {
@@ -29,12 +32,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
+    public void updateAccount(Account account) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.update(employee);
+            session.update(account);
 
             transaction.commit();
         } catch (Exception e) {
@@ -46,12 +49,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void deleteEmployee(Employee employee) {
+    public void deleteAccount(Account account) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.delete(employee);
+            session.delete(account);
 
             transaction.commit();
         } catch (Exception e) {
@@ -62,23 +65,23 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
     }
 
+
     @Override
-    public Optional<Employee> findEmployeeById(Integer id) {
-        try(Session session = SessionManager.getSessionFactory().openSession()){
-            Employee employee = session.find(Employee.class,id);
-            return Optional.ofNullable(employee);
-        } catch (Exception e){
+    public Optional<Account> findAccountById(int id) {
+        try (Session session = SessionManager.getSessionFactory().openSession()) {
+            Account account = session.find(Account.class, id);
+            return Optional.ofNullable(account);
+        } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public List<Account> findAllAccounts() {
         try(Session session = SessionManager.getSessionFactory().openSession()){
-            Query<Employee> query = session.createQuery(
-                    "select e from Employee e",
-                    Employee.class
+            Query<Account> query = session.createQuery(
+                    "select a from Account a"
             );
             return query.list();
         } catch (Exception e){

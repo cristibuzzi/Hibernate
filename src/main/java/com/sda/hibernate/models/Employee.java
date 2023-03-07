@@ -23,6 +23,9 @@ public class Employee {
     @Column(name = "salary")
     private Integer salary;
 
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
     public Employee() {
 
     }
@@ -90,6 +93,14 @@ public class Employee {
 
     public void setSalary(Integer salary) {
         this.salary = salary;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override
