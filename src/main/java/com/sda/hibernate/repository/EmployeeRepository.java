@@ -17,4 +17,6 @@ public interface EmployeeRepository {
     Optional<Employee> findEmployeeById(Integer id);
 
     List<Employee> getAllEmployees();
+
+    List<Employee> getAllEmployeesWithNamesStartingWithJ();
 }

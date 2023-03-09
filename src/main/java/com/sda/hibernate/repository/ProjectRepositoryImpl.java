@@ -1,9 +1,10 @@
 package com.sda.hibernate.repository;
 
+import com.sda.hibernate.models.Department;
 import com.sda.hibernate.models.Employee;
+import com.sda.hibernate.models.Project;
 import com.sda.hibernate.utils.SessionManager;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -11,15 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EmployeeRepositoryImpl implements EmployeeRepository {
-
+public class ProjectRepositoryImpl implements ProjectRepository {
     @Override
-    public void createEmployee(Employee employee) {
+    public void createProject(Project project) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.save(employee);
+            session.save(project);
 
             transaction.commit();
         } catch (Exception e) {
@@ -31,12 +31,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
+    public void updateProject(Project project) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.update(employee);
+            session.update(project);
 
             transaction.commit();
         } catch (Exception e) {
@@ -48,12 +48,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void deleteEmployee(Employee employee) {
+    public void deleteProject(Project project) {
         Transaction transaction = null;
         try (Session session = SessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-            session.delete(employee);
+            session.delete(project);
 
             transaction.commit();
         } catch (Exception e) {
@@ -65,10 +65,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Optional<Employee> findEmployeeById(Integer id) {
+    public Optional<Project> findById(int id) {
         try (Session session = SessionManager.getSessionFactory().openSession()) {
-            Employee employee = session.find(Employee.class, id);
-            return Optional.ofNullable(employee);
+            Project project = session.find(Project.class, id);
+            return Optional.ofNullable(project);
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
@@ -76,11 +76,23 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public Optional<Project> findByIdAndLoadEmployees(int id) {
         try (Session session = SessionManager.getSessionFactory().openSession()) {
-            Query<Employee> query = session.createQuery(
-                    "select e from Employee e",
-                    Employee.class
+            Project project = session.find(Project.class, id);
+            System.out.println(project.getEmployees().size());
+            return Optional.ofNullable(project);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Project> findAllProject() {
+        try (Session session = SessionManager.getSessionFactory().openSession()) {
+            Query<Project> query = session.createQuery(
+                    "select e from Project e",
+                    Project.class
             );
             return query.list();
         } catch (Exception e) {
@@ -88,18 +100,4 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return new ArrayList<>();
         }
     }
-
-    @Override
-    public List<Employee> getAllEmployeesWithNamesStartingWithJ() {
-        try (Session session = SessionManager.getSessionFactory().openSession()) {
-
-            String hqlQuery = "from Employee e WHERE e.firstName like 'j%' ";
-            Query<Employee> query = session.createQuery(hqlQuery, Employee.class);
-            return query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
 }
-

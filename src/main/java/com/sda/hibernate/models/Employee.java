@@ -2,6 +2,7 @@ package com.sda.hibernate.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -26,6 +27,21 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+    @ManyToMany
+    @JoinTable(
+            name = "employees_projects",
+            joinColumns = {
+                    @JoinColumn(name = "employee_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "project_id")
+            }
+    )
+    private List<Project> projects;
+
     public Employee() {
 
     }
@@ -101,6 +117,22 @@ public class Employee {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     @Override
